@@ -15,7 +15,7 @@ import static java.nio.file.Files.readAllLines;
 public class MapBuilder {
     public static List<Town> towns = new ArrayList<>();
 
-    public static void initMap() throws IOException {
+    public static List<Town> initMap() throws IOException {
         List<String> lines;
         MapBuilder mapBuilder = new MapBuilder();
         lines = readAllLines(Paths.get("src/main/resource/input.txt"));
@@ -28,6 +28,7 @@ public class MapBuilder {
             Town bDex = mapBuilder.addTownToMap(townB, towns);
             aDex.addEdge(bDex, weight);
         }
+        return towns;
     }
 
     public static Town getTownByName(String name) {
@@ -54,7 +55,7 @@ public class MapBuilder {
             if (distToStart < destinationTown.getVertDistance()) {
                 townQueue.remove(destinationTown);
                 destinationTown.setVertDistance(distToStart);
-//                destinationTown.setPrevious(startTown);
+                destinationTown.setPrevious(startTown);
                 townQueue.add(destinationTown);
             }
         }

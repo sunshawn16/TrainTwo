@@ -10,6 +10,8 @@ public class Town implements Comparable<Town> {
     private String name;
     private ArrayList<Edge> adj = new ArrayList<Edge>();
     private double vertDistance = POSITIVE_INFINITY;
+    private Town previous;
+    private Town next;
 
     public String getName() {
         return name;
@@ -56,9 +58,26 @@ public class Town implements Comparable<Town> {
                 .filter(edge -> target.equals(edge.getDestination()))
                 .findFirst()
                 .map(Edge::getDistance)
-                .orElse(null);
+                .orElse(POSITIVE_INFINITY);
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
+    public Town getPrevious() {
+        return previous;
+    }
 
+    public void setPrevious(Town previous) {
+        this.previous = previous;
+    }
+
+    public void setNext(Town next) {
+        this.next = next;
+    }
+
+    public Town getNext() {
+        return next;
+    }
 }

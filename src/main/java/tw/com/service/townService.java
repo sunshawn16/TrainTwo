@@ -9,13 +9,14 @@ public class townService {
         double sumDistance = 0.0;
         for (int i = 0; i < names.size() - 1; i++) {
             Double distance = getTownByName(names.get(i)).getDisByDes(getTownByName(names.get(i + 1)));
-            if (distance == null) {
-                throw new NullPointerException("NO SUCH ROUTE");
+            if (distance == Double.POSITIVE_INFINITY) {
+                System.out.print("NO SUCH ROUTE");
             }
             sumDistance = sumDistance + distance;
         }
         return sumDistance;
 
     }
+    
 
 }

@@ -19,7 +19,6 @@ public class MapBuilder {
         List<String> lines;
         MapBuilder mapBuilder = new MapBuilder();
         lines = readAllLines(Paths.get("src/main/resource/input.txt"));
-
         for (String line : lines) {
             String[] vals = line.split("\\s+");
             Town townA = new Town(vals[0]);
@@ -62,9 +61,6 @@ public class MapBuilder {
     }
 
     private Town addTownToMap(Town toAdd, List<Town> towns) {
-//           towns.stream()
-//                .filter(town->town.equals(toAdd))
-//                .
         for (Town town : towns) {
             if (town.equals(toAdd))
                 return town;

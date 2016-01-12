@@ -1,23 +1,23 @@
-package tw.com.model;
+package tw.com.service;
 
 import org.junit.Before;
 import org.junit.Test;
 import tw.com.Utils.MapBuilder;
+import tw.com.model.Town;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static tw.com.model.Town.calculateDistance;
+import static tw.com.service.townService.calculateDistance;
 
-public class TownTest {
-
+public class townServiceTest {
     private ArrayList<Town> towns;
 
     @Before
     public void setUp() throws Exception {
-         MapBuilder.initMap();
+        MapBuilder.initMap();
     }
 
     @Test
@@ -53,8 +53,6 @@ public class TownTest {
         System.out.println("5.the Distance of the route A-E-D:" + calculateDistance(names));
 
     }
-
-
 
 
 }

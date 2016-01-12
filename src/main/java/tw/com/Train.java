@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static java.util.Arrays.asList;
-import static tw.com.model.Town.calculateDistance;
+import static tw.com.service.townService.calculateDistance;
 
 public class Train {
     public static void main(String[] args) throws IOException {

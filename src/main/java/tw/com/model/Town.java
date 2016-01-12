@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import static java.lang.Double.POSITIVE_INFINITY;
 import static java.lang.Double.compare;
-import static tw.com.Utils.MapBuilder.getTownByName;
 
 public class Town implements Comparable<Town> {
     private String name;
@@ -52,7 +51,7 @@ public class Town implements Comparable<Town> {
         adj.add(new Edge(target, distance));
     }
 
-    private Double getDisByDes(Town target) {
+    public Double getDisByDes(Town target) {
         return this.getAdj().stream()
                 .filter(edge -> target.equals(edge.getDestination()))
                 .findFirst()
@@ -60,18 +59,6 @@ public class Town implements Comparable<Town> {
                 .orElse(null);
     }
 
-    public static double calculateDistance(ArrayList<String> names) {
-        double sumDistance = 0.0;
-        for (int i = 0; i < names.size() - 1; i++) {
-            Double distance = getTownByName(names.get(i)).getDisByDes(getTownByName(names.get(i + 1)));
-            if (distance == null) {
-//                System.out.println("NO SUCH ROUTE");
-                throw new NullPointerException("NO SUCH ROUTE");
-            }
-            sumDistance = sumDistance + distance;
-        }
-        return sumDistance;
 
-    }
 
 }

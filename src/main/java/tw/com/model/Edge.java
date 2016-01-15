@@ -1,28 +1,37 @@
 package tw.com.model;
 
 public class Edge {
-    private Town destination;
-    private double distance;
+    private String startTown;
+    private String endTown;
+    private int distance;
 
-    public Edge(Town target, double distance)
-    {
-        this.destination = target;
+    public Edge(String startTown, String endTown, int distance) {
+        this.startTown = startTown;
+        this.endTown = endTown;
         this.distance = distance;
     }
 
-    public Town getDestination() {
-        return destination;
+    public String getStartTown() {
+        return startTown;
     }
 
-    public void setDestination(Town destination) {
-        this.destination = destination;
+    public void setStartTown(String startTown) {
+        this.startTown = startTown;
     }
 
-    public double getDistance() {
+    public String getEndTown() {
+        return endTown;
+    }
+
+    public void setEndTown(String endTown) {
+        this.endTown = endTown;
+    }
+
+    public int getDistance() {
         return distance;
     }
 
-    public void setDistance(double distance) {
+    public void setDistance(int distance) {
         this.distance = distance;
     }
 }

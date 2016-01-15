@@ -13,7 +13,7 @@ import static com.sun.xml.internal.bind.v2.schemagen.Util.equalsIgnoreCase;
 import static java.util.stream.Collectors.toList;
 
 public class RouteService {
-    public static final int INFINITY = 999999;
+    private static final int INFINITY = 999999;
     private final List<Edge> edges;
     private CalculateDistance calculateDistance;
 
@@ -55,10 +55,10 @@ public class RouteService {
 
     private List<Path> convertToPath(List<Edge> routes, Path currentPath) {
         List<String> towns = currentPath.getTowns();
-        ArrayList<Path> newPathList = new ArrayList<>();
+        List<Path> newPathList = new ArrayList<>();
         towns.add(routes.get(0).getStartTown());
         for (Edge edge : routes) {
-            towns.remove(towns.size()-1);
+            towns.remove(towns.size() - 1);
             Path newPath = new Path(towns);
             newPath.getTowns().add(edge.getEndTown());
             newPathList.add(newPath);    //newPath被覆盖or 影响towns

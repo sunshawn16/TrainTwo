@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 import static com.sun.xml.internal.bind.v2.schemagen.Util.equalsIgnoreCase;
 
 public class CalculateDistance {
-    public static final int INFINITY = 999999;
+    private static final int INFINITY = 999999;
     private List<Edge> edges;
 
     public CalculateDistance(IoService ioService) throws IOException {
@@ -20,7 +20,7 @@ public class CalculateDistance {
     public int getDistance(Path path) {
         int totalDistance = 0;
 
-        for (int town = 1; town < path.getTowns().size() ; town++) {
+        for (int town = 1; town < path.getTowns().size(); town++) {
             String startTown = path.getTowns().get(town - 1);
             String endTown = path.getTowns().get(town);
 
@@ -29,10 +29,10 @@ public class CalculateDistance {
                 public boolean test(Edge edge) {
                     return equalsIgnoreCase(edge.getStartTown(), startTown) && equalsIgnoreCase(edge.getEndTown(), endTown);
                 }
-            }).findFirst().orElse(new Edge(startTown,endTown,INFINITY)).getDistance();
+            }).findFirst().orElse(new Edge(startTown, endTown, INFINITY)).getDistance();
         }
 
-        if(totalDistance >INFINITY){
+        if (totalDistance > INFINITY) {
             return INFINITY;
         }
         return totalDistance;

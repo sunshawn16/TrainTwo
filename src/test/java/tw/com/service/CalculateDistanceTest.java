@@ -11,7 +11,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class CalculateDistanceTest {
-    public static final int INFINITY = 999999;
+    private static final int INFINITY = 999999;
     private IoService ioService;
     private CalculateDistance calculateDistance;
 

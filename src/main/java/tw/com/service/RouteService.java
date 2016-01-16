@@ -15,7 +15,6 @@ import static java.util.stream.Collectors.toList;
 public class RouteService {
     private static final int INFINITY = 999999;
     private final List<Edge> edges;
-    private CalculateDistance calculateDistance;
 
     public RouteService(IoService ioService) throws IOException {
         this.edges = ioService.read();
@@ -38,12 +37,13 @@ public class RouteService {
 
     private void findNextPath(List<Path> processedPaths, List<Path> finalPaths, Path currentPath, String endTown, int currentStop, int maxStops) {
         String endTownOfCurrentPath = currentPath.getTowns().get(currentPath.getTowns().size() - 1);
-        if (equalsIgnoreCase(endTown, endTownOfCurrentPath)) {
+        if (currentStop < maxStops && equalsIgnoreCase(endTown, endTownOfCurrentPath)) {
             finalPaths.add(currentPath);
             return;
         }
-        if (currentStop >= maxStops)
+        if (currentStop >= maxStops) {
             return;
+        }
         List<Edge> edges = getEdgesStartFrom(endTownOfCurrentPath);
         List<Path> newPaths = convertToPath(edges, currentPath);
         processedPaths.addAll(newPaths);
@@ -55,24 +55,14 @@ public class RouteService {
 
     private List<Path> convertToPath(List<Edge> routes, Path currentPath) {
         List<String> towns = currentPath.getTowns();
-        List<Path> newPathList = new ArrayList<>();
-        towns.add(routes.get(0).getStartTown());
-        for (Edge edge : routes) {
-            towns.remove(towns.size() - 1);
-            Path newPath = new Path(towns);
-            newPath.getTowns().add(edge.getEndTown());
-            newPathList.add(newPath);    //newPath被覆盖or 影响towns
-
-        }
-        return newPathList;
-//        return routes.stream().map(new Function<Edge, Path>() {
-//            @Override
-//            public Path apply(Edge edge) {
-//                Path newPath = new Path(towns);
-//                newPath.getTowns().add(edge.getEndTown());
-//                return newPath;
-//            }
-//        }).collect(toList());
+        return routes.stream().map(new Function<Edge, Path>() {
+            @Override
+            public Path apply(Edge edge) {
+                List<String> newTowns = towns.stream().collect(toList());
+                newTowns.add(edge.getEndTown());
+                return new Path(newTowns);
+            }
+        }).collect(toList());
     }
 
     private List<Path> convertToPath(List<Edge> edges) {

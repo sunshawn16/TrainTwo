@@ -12,16 +12,18 @@ import java.util.function.Predicate;
 import static com.sun.xml.internal.bind.v2.schemagen.Util.equalsIgnoreCase;
 import static java.util.stream.Collectors.toList;
 
-public class RouteService {
+public class ShortestRouteService {
     private static final int INFINITY = 999999;
     private final List<Edge> edges;
+    private final CalculateDistance calculateDistance;
 
-    public RouteService(IoService ioService) throws IOException {
+    public ShortestRouteService(IoService ioService,CalculateDistance calculateDistance) throws IOException {
         this.edges = ioService.read();
+        this.calculateDistance = new CalculateDistance(ioService);
 
     }
 
-    public List<Path> getNumOfPathsWithStopRequ(String startTown, String endTown, int maxStops, String require) {
+    public List<Path> getNumOfPathsWithStopRequ(String startTown, String endTown) {
         List<Path> finalPaths = new ArrayList<Path>();
         List<Path> processedPaths = new ArrayList<Path>();
 
@@ -29,7 +31,7 @@ public class RouteService {
         processedPaths.addAll(pathsFromStartTown);
 
         for (Path path : pathsFromStartTown) {
-            findNextPath(processedPaths, finalPaths, path, endTown, 0, maxStops, require);
+            findNextPath(processedPaths, finalPaths, path, endTown, 0);
         }
 
         for (Path path : finalPaths) {
@@ -40,34 +42,24 @@ public class RouteService {
     }
 
     private void findNextPath(List<Path> processedPaths, List<Path> finalPaths, Path currentPath, String endTown,
-                              int currentStop, int maxStops, String require) {
+                              int currentStop) {
         String endTownOfCurrentPath = currentPath.getTowns().get(currentPath.getTowns().size() - 1);
-
-        if (require.equals("max")) {
-            if (currentStop < maxStops && equalsIgnoreCase(endTown, endTownOfCurrentPath)) {
+        if (isNotRepeated(currentPath)) {
+            if (equalsIgnoreCase(endTown, endTownOfCurrentPath)) {
                 finalPaths.add(currentPath);
                 return;
             }
-        }
-        if (require.equals("num")) {
-            if (currentStop == maxStops - 1 && equalsIgnoreCase(endTown, endTownOfCurrentPath)) {
-                finalPaths.add(currentPath);
-                return;
+
+            List<Edge> edges = getEdgesStartFrom(endTownOfCurrentPath);
+            List<Path> newPaths = convertToPath(edges, currentPath);
+            processedPaths.addAll(newPaths);
+
+            for (Path newPath : newPaths) {
+
+                findNextPath(processedPaths, finalPaths, newPath, endTown, currentStop + 1);
+
             }
         }
-        if (currentStop >= maxStops) {
-            return;
-        }
-
-        List<Edge> edges = getEdgesStartFrom(endTownOfCurrentPath);
-        List<Path> newPaths = convertToPath(edges, currentPath);
-
-        processedPaths.addAll(newPaths);
-
-        for (Path newPath : newPaths) {
-            findNextPath(processedPaths, finalPaths, newPath, endTown, currentStop + 1, maxStops, require);
-        }
-
     }
 
     private List<Path> convertToPath(List<Edge> routes, Path currentPath) {
@@ -104,4 +96,30 @@ public class RouteService {
         }).collect(toList());
     }
 
+
+    public int findShortestRoute(String startTown, String endTown) {
+        List<Path> pathList = getNumOfPathsWithStopRequ(startTown, endTown);
+        int finalPathDistance = calculateDistance.getDistance(pathList.get(0));
+        for (Path path : pathList) {
+            int pathDistance = calculateDistance.getDistance(path);
+            if (finalPathDistance > pathDistance) {
+                finalPathDistance = pathDistance;
+            }
+        }
+        return finalPathDistance;
+    }
+
+    private boolean isNotRepeated(Path currentPath) {
+        List<String> towns = currentPath.getTowns().stream().collect(toList());
+        String endOfCurrentPath = towns.get(towns.size() - 1);
+
+        boolean flag = true;
+        for (int i = 1; i < towns.size() - 2; i++) {
+            if (endOfCurrentPath == towns.get(i)) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
 }

@@ -1,7 +1,6 @@
 package tw.com.service;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -16,7 +15,7 @@ public class RouteServiceTest {
     public void setUp() throws Exception {
         ioService = new IoService();     // 依赖注入问题    Mokito?
         ioService.read();
-        routeService = new RouteService(ioService,calculateDistance);
+        routeService = new RouteService(ioService);
     }
 
     @Test
@@ -30,16 +29,6 @@ public class RouteServiceTest {
         assertThat(routeService.getNumOfPathsWithStopRequ("A", "C", 4, "num").size(), is(3));
     }
 
-    @Test
-    public void testGetShortestRouteFromAToC() throws Exception {
-        assertThat(routeService.findShortestRoute("A","C"),is(9));
-    }
 
-    @Ignore
-    public void testGetShortestRouteFromBToB() throws Exception {
-        routeService.getNumOfPathsWithStopRequ("B", "B", 999999, "shortest");
-//        assertThat(routeService.findShortestRoute("B","B"),is(9));
-
-    }
 
 }

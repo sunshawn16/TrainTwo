@@ -10,13 +10,11 @@ public class RoutServiceWithoutLoopTest {
 
     private RouteServiceWithoutLoop routeServiceWithoutLoop;
     private IoService ioService;
-    private CalculateDistanceService calculateDistanceService;
 
     @Before
     public void setUp() throws Exception {
         ioService = new IoService();
         ioService.read();
-        calculateDistanceService = new CalculateDistanceService(ioService);
         routeServiceWithoutLoop = new RouteServiceWithoutLoop(ioService);
 
     }

@@ -18,7 +18,7 @@ public class CalculateDistanceServiceTest {
     @Before
     public void setUp() throws Exception {
         this.ioService = new IoService();
-        calculateDistanceService = new CalculateDistanceService(ioService);
+        calculateDistanceService = new CalculateDistanceService(ioService);//mockito
         ioService.read();
     }
 

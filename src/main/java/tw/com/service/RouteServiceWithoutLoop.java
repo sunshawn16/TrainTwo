@@ -12,12 +12,11 @@ import static java.util.Collections.min;
 import static java.util.stream.Collectors.toList;
 
 public class RouteServiceWithoutLoop {
-    private static final int INFINITY = 999999;
-    private List<Edge> edges;
+    private final IoService ioService;
     private CalculateDistanceService calculateDistanceService;
 
     public RouteServiceWithoutLoop(IoService ioService) throws IOException {
-        this.edges = ioService.read();
+        this.ioService = ioService;
         this.calculateDistanceService = new CalculateDistanceService(ioService);
 
     }
@@ -26,7 +25,7 @@ public class RouteServiceWithoutLoop {
         List<Path> finalPaths = new ArrayList<Path>();
         List<Path> processedPaths = new ArrayList<Path>();
 
-        List<Path> pathsFromStartTown = convertToPath(getEdgesStartFrom(startTown));
+        List<Path> pathsFromStartTown = convertToPath(ioService.getEdgesStartFrom(startTown));
         processedPaths.addAll(pathsFromStartTown);
 
         for (Path path : pathsFromStartTown) {
@@ -54,7 +53,7 @@ public class RouteServiceWithoutLoop {
                 }
             }
 
-            List<Edge> edges = getEdgesStartFrom(endTownOfCurrentPath);
+            List<Edge> edges = ioService.getEdgesStartFrom(endTownOfCurrentPath);
             List<Path> newPaths = convertToPath(edges, currentPath);
             processedPaths.addAll(newPaths);
 
@@ -81,12 +80,6 @@ public class RouteServiceWithoutLoop {
             return new Path(towns);
         }).collect(toList());
     }
-
-    private List<Edge> getEdgesStartFrom(String startTown) {
-        return edges.stream().filter(edge -> edge.getDistance() != INFINITY && equalsIgnoreCase(edge.getStartTown(),
-                startTown)).collect(toList());
-    }
-
 
     public int findShortestDistance(String startTown, String endTown) {
         List<Path> pathList = getNumOfPathsWithStopRequ(startTown, endTown, "shortest", 0);

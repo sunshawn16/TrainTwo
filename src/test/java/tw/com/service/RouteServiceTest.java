@@ -9,11 +9,10 @@ import static org.junit.Assert.assertThat;
 public class RouteServiceTest {
     private RouteService routeService;
     private IoService ioService;
-    private CalculateDistance calculateDistance;
 
     @Before
     public void setUp() throws Exception {
-        ioService = new IoService();     // 依赖注入问题    Mokito?
+        ioService = new IoService();     // 依赖注入问题    Mokito
         ioService.read();
         routeService = new RouteService(ioService);
     }
@@ -21,14 +20,12 @@ public class RouteServiceTest {
     @Test
     public void testGetNumberOfPathsGivenMax3FromCToC() throws Exception {
         assertThat(routeService.getNumOfPathsWithStopRequ("C", "C", 3, "max").size(), is(2));
-
     }
 
     @Test
     public void testGetNumberOfPathGiven4StopsFromAToC() throws Exception {
         assertThat(routeService.getNumOfPathsWithStopRequ("A", "C", 4, "num").size(), is(3));
     }
-
 
 
 }

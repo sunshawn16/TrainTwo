@@ -14,7 +14,8 @@ public class RouteServiceTest {
     public void setUp() throws Exception {
         ioService = new IoService();     // 依赖注入问题    Mokito
         ioService.read();
-        routeService = new RouteService(ioService);
+        CovertService covertService = new CovertService();
+        routeService = new RouteService(ioService,covertService);
     }
 
     @Test

@@ -8,21 +8,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.sun.xml.internal.bind.v2.schemagen.Util.equalsIgnoreCase;
-import static java.util.stream.Collectors.toList;
 
 public class RouteService {
 
-    public IoService ioService;
+    private CovertService covertService;
+    private IoService ioService;
 
-    public RouteService(IoService ioService) throws IOException {
+    public RouteService(IoService ioService,CovertService covertService) throws IOException {
         this.ioService = ioService;
+        this.covertService = covertService;
     }
 
     public List<Path> getNumOfPathsWithStopRequ(String startTown, String endTown, int refNum, String require) {
         List<Path> finalPaths = new ArrayList<Path>();
         List<Path> processedPaths = new ArrayList<Path>();
 
-        List<Path> pathsFromStartTown = convertToPath(ioService.getEdgesStartFrom(startTown));
+        List<Path> pathsFromStartTown = covertService.convertToPath(ioService.getEdgesStartFrom(startTown));
         processedPaths.addAll(pathsFromStartTown);
 
         for (Path path : pathsFromStartTown) {
@@ -40,7 +41,7 @@ public class RouteService {
             return;
 
         List<Edge> edges = ioService.getEdgesStartFrom(endTownOfCurrentPath);
-        List<Path> newPaths = convertToPath(edges, currentPath);
+        List<Path> newPaths = covertService.convertToPath(edges, currentPath);
 
         processedPaths.addAll(newPaths);
 
@@ -68,23 +69,6 @@ public class RouteService {
         return false;
     }
 
-    private List<Path> convertToPath(List<Edge> routes, Path currentPath) {
-        List<String> towns = currentPath.getTowns();
-        return routes.stream().map(edge -> {
-            List<String> newTowns = towns.stream().collect(toList());
-            newTowns.add(edge.getEndTown());
-            return new Path(newTowns);
-        }).collect(toList());
-    }
-
-    private List<Path> convertToPath(List<Edge> edges) {
-        return edges.stream().map(edge -> {
-            List<String> towns = new ArrayList<>();
-            towns.add(edge.getStartTown());
-            towns.add(edge.getEndTown());
-            return new Path(towns);
-        }).collect(toList());
-    }
 
 
 }

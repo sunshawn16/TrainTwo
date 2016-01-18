@@ -15,7 +15,8 @@ public class RoutServiceWithoutLoopTest {
     public void setUp() throws Exception {
         ioService = new IoService();
         ioService.read();
-        routeServiceWithoutLoop = new RouteServiceWithoutLoop(ioService);
+        CovertService covertService = new CovertService();
+        routeServiceWithoutLoop = new RouteServiceWithoutLoop(ioService,covertService);
 
     }
 

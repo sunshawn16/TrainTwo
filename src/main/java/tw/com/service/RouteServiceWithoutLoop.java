@@ -12,11 +12,14 @@ import static java.util.Collections.min;
 import static java.util.stream.Collectors.toList;
 
 public class RouteServiceWithoutLoop {
-    private final IoService ioService;
+    private IoService ioService;
     private CalculateDistanceService calculateDistanceService;
+    private CovertService covertService;
 
-    public RouteServiceWithoutLoop(IoService ioService) throws IOException {
+
+    public RouteServiceWithoutLoop(IoService ioService,CovertService covertService) throws IOException {
         this.ioService = ioService;
+        this.covertService = covertService;
         this.calculateDistanceService = new CalculateDistanceService(ioService);
 
     }
@@ -25,7 +28,7 @@ public class RouteServiceWithoutLoop {
         List<Path> finalPaths = new ArrayList<Path>();
         List<Path> processedPaths = new ArrayList<Path>();
 
-        List<Path> pathsFromStartTown = convertToPath(ioService.getEdgesStartFrom(startTown));
+        List<Path> pathsFromStartTown = covertService.convertToPath(ioService.getEdgesStartFrom(startTown));
         processedPaths.addAll(pathsFromStartTown);
 
         for (Path path : pathsFromStartTown) {
@@ -54,31 +57,13 @@ public class RouteServiceWithoutLoop {
             }
 
             List<Edge> edges = ioService.getEdgesStartFrom(endTownOfCurrentPath);
-            List<Path> newPaths = convertToPath(edges, currentPath);
+            List<Path> newPaths = covertService.convertToPath(edges, currentPath);
             processedPaths.addAll(newPaths);
 
             for (Path newPath : newPaths) {
                 findNextPath(processedPaths, finalPaths, newPath, endTown, currentStop + 1, require, refNum);
             }
         }
-    }
-
-    private List<Path> convertToPath(List<Edge> routes, Path currentPath) {
-        List<String> towns = currentPath.getTowns();
-        return routes.stream().map(edge -> {
-            List<String> newTowns = towns.stream().collect(toList());
-            newTowns.add(edge.getEndTown());
-            return new Path(newTowns);
-        }).collect(toList());
-    }
-
-    private List<Path> convertToPath(List<Edge> edges) {
-        return edges.stream().map(edge -> {
-            List<String> towns = new ArrayList<>();
-            towns.add(edge.getStartTown());
-            towns.add(edge.getEndTown());
-            return new Path(towns);
-        }).collect(toList());
     }
 
     public int findShortestDistance(String startTown, String endTown) {

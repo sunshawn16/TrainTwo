@@ -42,13 +42,13 @@ public class RouteServiceWithoutLoop {
                               int currentStop, String require, int refNum) {
         String endTownOfCurrentPath = currentPath.getTowns().get(currentPath.getTowns().size() - 1);
         if (isNotLooped(currentPath)) {
-            if (require.equals("shortest")) {
+            if ("shortest".equals(require)) {
                 if (equalsIgnoreCase(endTown, endTownOfCurrentPath)) {
                     finalPaths.add(currentPath);
                     return;
                 }
             }
-            if (require.equals("distance")) {
+            if ("distance".equals(require)) {
                 if (equalsIgnoreCase(endTown, endTownOfCurrentPath)
                         && calculateDistanceService.getDistance(currentPath) < refNum) {
                     finalPaths.add(currentPath);

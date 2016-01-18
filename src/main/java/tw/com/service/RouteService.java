@@ -51,13 +51,13 @@ public class RouteService {
     }
 
     private boolean decideFinalPath(List<Path> finalPaths, Path currentPath, String endTown, int currentStop, int refNum, String require, String endTownOfCurrentPath) {
-        if (require.equals("max")) {
+        if ("max".equals(require)) {
             if (currentStop < refNum && equalsIgnoreCase(endTown, endTownOfCurrentPath)) {
                 finalPaths.add(currentPath);
                 return true;
             }
         }
-        if (require.equals("num")) {
+        if ("num".equals(require)) {
             if (currentStop == refNum - 1 && equalsIgnoreCase(endTown, endTownOfCurrentPath)) {
                 finalPaths.add(currentPath);
                 return true;
@@ -68,7 +68,5 @@ public class RouteService {
         }
         return false;
     }
-
-
 
 }
